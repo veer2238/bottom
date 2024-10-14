@@ -22,7 +22,16 @@ const passportSchema = new mongoose.Schema({
     important:{
       type:Boolean,
       default:false
+    },
+    normal:{
+      type:Boolean,
+      default:false
+    },
+    status:{
+      type:Boolean,
+      default:false
     }
+
   });
 
   const Passport = mongoose.model('passport', passportSchema);
