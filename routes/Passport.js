@@ -84,7 +84,7 @@ app.post("/passport", async (req, res) => {
      
       const result = await Passport.findByIdAndUpdate(
         { _id: id }, 
-        { important: true }, 
+        { important: true, normal: false,status:false },
         { new: true }
       );
   
@@ -100,6 +100,31 @@ app.post("/passport", async (req, res) => {
     }
   });
 
+  app.post("/passport-check", async (req, res) => {
+    const { id } = req.body;
+  
+    try {
+     
+      const result = await Passport.findByIdAndUpdate(
+        { _id: id }, 
+        { status:true,important: false, normal: false },
+        { new: true }
+      );
+  
+      if (result) {
+        console.log(result)
+        return res.json({ success: true, message: "Record marked as status"});
+      } else {
+        return res.json({ success: false, message: "Record not found" });
+      }
+    } catch (error) {
+      console.error("Update error:", error);
+      res.status(500).json({ success: false, message: "Failed to update record" });
+    }
+  });
+
+
+
 
   app.post("/passport-normal", async (req, res) => {
     const { id } = req.body;
@@ -108,7 +133,7 @@ app.post("/passport", async (req, res) => {
      
       const result = await Passport.findByIdAndUpdate(
         { _id: id }, 
-        { important: false }, 
+        { important: false, normal: true,status:false },
         { new: true }
       );
   
