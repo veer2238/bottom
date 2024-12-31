@@ -8,7 +8,7 @@ const passportSchema = new mongoose.Schema({
     idType: {
       type: String,
       required: true,
-      enum: ['aadhar', 'pan', 'passport', 'voter','driving','students','other'],
+      enum: ['aadhar', 'pan', 'passport', 'voter','driving','visitor-visa','oci','light-bill','students','other','gst','new-aadhar'],
     },
     date: {
       type: Date,
@@ -28,6 +28,26 @@ const passportSchema = new mongoose.Schema({
       default:false
     },
     status:{
+      type:Boolean,
+      default:false
+    },
+
+    restore:{
+      type:Boolean,
+      default:false
+    },
+
+    today:{
+      type:Boolean,
+      default:false
+    },
+
+    rejected:{
+      type:Boolean,
+      default:false
+    },
+
+    notimp:{
       type:Boolean,
       default:false
     }
