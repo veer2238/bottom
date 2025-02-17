@@ -52,6 +52,8 @@ const passportSchema = new mongoose.Schema({
       default:false
     }
 
+ 
+
   });
 
   const Passport = mongoose.model('passport', passportSchema);
