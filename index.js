@@ -37,6 +37,13 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
+// mongoose
+//   .connect(
+//     "mongodb+srv://veer04agraval:mRU37WQcT8udQc7n@cluster0.lnugf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+//   )
+//   .then(() => console.log("MongoDB connected"))
+//   .catch((err) => console.error("MongoDB connection error:", err));
+
 
 
 
