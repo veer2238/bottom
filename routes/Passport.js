@@ -138,6 +138,29 @@ app.post("/passport", async (req, res) => {
     }
   });
 
+  app.post("/passport-checkb", async (req, res) => {
+    const { id } = req.body;
+  
+    try {
+     
+      const result = await Passport.findByIdAndUpdate(
+        { _id: id }, 
+        { status:false,rejected:false,notimp:false,restore:false,today:false },
+        { new: true }
+      );
+  
+      if (result) {
+        console.log(result)
+        return res.json({ success: true, message: "Record marked as new entry"});
+      } else {
+        return res.json({ success: false, message: "Record not found" });
+      }
+    } catch (error) {
+      console.error("Update error:", error);
+      res.status(500).json({ success: false, message: "Failed to update record" });
+    }
+  });
+
 
 
 
@@ -188,6 +211,29 @@ app.post("/passport", async (req, res) => {
     }
   });
 
+  app.post("/passport-todayb", async (req, res) => {
+    const { id } = req.body;
+  
+    try {
+     
+      const result = await Passport.findByIdAndUpdate(
+        { _id: id }, 
+        {today:false,  notimp:false,rejected:false,restore:false,status:false },
+        { new: true }
+      );
+  
+      if (result) {
+        console.log(result)
+        return res.json({ success: true, message: "Record marked as mew record"});
+      } else {
+        return res.json({ success: false, message: "Record not found" });
+      }
+    } catch (error) {
+      console.error("Update error:", error);
+      res.status(500).json({ success: false, message: "Failed to update record" });
+    }
+  });
+
   app.post("/passport-rejected", async (req, res) => {
     const { id } = req.body;
   
@@ -202,6 +248,29 @@ app.post("/passport", async (req, res) => {
       if (result) {
         console.log(result)
         return res.json({ success: true, message: "Record marked as rejected"});
+      } else {
+        return res.json({ success: false, message: "Record not found" });
+      }
+    } catch (error) {
+      console.error("Update error:", error);
+      res.status(500).json({ success: false, message: "Failed to update record" });
+    }
+  });
+
+  app.post("/passport-rejectedb", async (req, res) => {
+    const { id } = req.body;
+  
+    try {
+     
+      const result = await Passport.findByIdAndUpdate(
+        { _id: id }, 
+        {rejected:false,restore:false,status:false,today:false,notimp:false },
+        { new: true }
+      );
+  
+      if (result) {
+        console.log(result)
+        return res.json({ success: true, message: "Record marked as new entry"});
       } else {
         return res.json({ success: false, message: "Record not found" });
       }
@@ -226,6 +295,29 @@ app.post("/passport", async (req, res) => {
       if (result) {
         console.log(result)
         return res.json({ success: true, message: "Record marked as not imp"});
+      } else {
+        return res.json({ success: false, message: "Record not found" });
+      }
+    } catch (error) {
+      console.error("Update error:", error);
+      res.status(500).json({ success: false, message: "Failed to update record" });
+    }
+  });
+
+  app.post("/passport-nimpb", async (req, res) => {
+    const { id } = req.body;
+  
+    try {
+     
+      const result = await Passport.findByIdAndUpdate(
+        { _id: id }, 
+        {notimp:false,rejected:false,restore:false,status:false,today:false },
+        { new: true }
+      );
+  
+      if (result) {
+        console.log(result)
+        return res.json({ success: true, message: "Record marked as new entry"});
       } else {
         return res.json({ success: false, message: "Record not found" });
       }
