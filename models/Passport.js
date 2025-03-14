@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const passportSchema = new mongoose.Schema({
     name: {
       type: String,
-      required: true,
+      required:true,
     },
     idType: {
       type: String,
@@ -50,7 +50,11 @@ const passportSchema = new mongoose.Schema({
     notimp:{
       type:Boolean,
       default:false
-    }
+    },
+    book:{
+      type:Boolean,
+      default:false
+    },
 
  
 
