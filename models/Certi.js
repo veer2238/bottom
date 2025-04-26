@@ -6,22 +6,7 @@ const certiSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    dob: {
-      type: String, 
-      required: true,
-    },
-    startDate: {
-      type: String, 
-      required: true,
-    },
-    endDate: {
-      type: String, 
-      required: true,
-    },
-    work: {
-      type: String,
-      required: true,
-    },
+
     certiId: {
       type: String,
       required: true,
