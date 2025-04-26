@@ -5,9 +5,9 @@ import express from "express";
 const app = express();
 
 app.post('/certi', async (req, res) => {
-    const { name, dob, startDate, endDate, work,certiId} = req.body;
+    const { name, work,certiId} = req.body;
   
-    const existingRecord = await Certi.findOne({ name,dob,certiId});
+    const existingRecord = await Certi.findOne({ name,certiId});
   
     if (existingRecord) {
       return res
@@ -18,9 +18,6 @@ app.post('/certi', async (req, res) => {
     try {
       const result = await Certi.create({
         name,
-        dob,
-        startDate,
-        endDate,
         work,
         certiId
       });
