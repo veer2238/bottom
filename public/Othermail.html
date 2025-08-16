@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>V-Ex Tech Solution — Message</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f4f7fb;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: #2a2a2a;
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 40px auto;
+      padding: 32px;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    h1, h2 {
+      color: #004e9b;
+    }
+
+    p, li {
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    ul {
+      padding-left: 20px;
+      margin: 10px 0;
+    }
+
+    .highlight {
+      font-weight: bold;
+      color: #005bbd;
+    }
+
+    .message-box {
+      margin: 24px 0;
+      background-color: #eef5fc;
+      padding: 18px;
+      border-left: 4px solid #007acc;
+      border-radius: 8px;
+      font-size: 15px;
+      white-space: pre-wrap;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #e2e2e2;
+      margin: 30px 0;
+    }
+
+    .contact-info, .socials, .footer {
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .contact-info a, .socials a {
+      color: #007acc;
+      text-decoration: none;
+    }
+
+    .socials a {
+      margin-right: 15px;
+    }
+
+    .footer {
+      margin-top: 30px;
+      color: #888;
+      font-size: 13px;
+    }
+
+    @media screen and (max-width: 680px) {
+      .container {
+        margin: 20px;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <p>Dear <span class="highlight">{{name}}</span>,</p>
+
+    <div class="message-box">
+      {{message}}
+    </div>
+
+    <hr />
+
+    <p>If you have any questions or need assistance, feel free to contact us via email or WhatsApp.</p>
+
+    <p>Best regards,<br><strong>Team V-Ex Tech Solution</strong></p>
+
+    <div class="contact-info">
+      <p>
+        Website: <a href="https://v-extechsolution.in">v-extechsolution.in</a><br>
+        Email: <a href="mailto:hrteam@v-extechsolution.in">hrteam@v-extechsolution.in</a><br>
+        Helpline: <a href="tel:+919664768292">+91 96647 68292</a>
+      </p>
+    </div>
+
+    <div class="socials">
+      <a href="https://www.linkedin.com/company/v-ex-tech-software-company-in-vadodara/mycompany/">LinkedIn</a>
+      <a href="https://www.youtube.com/@Veer_Agraval">YouTube</a>
+      <a href="https://www.instagram.com/v_extech/">Instagram</a>
+    </div>
+
+    <div class="footer">
+      Dhun Complex-301, Above Riya Bridal, near Amritsari Kulcha,
+      Opp. Pavan Park Society, Nizampura, Vadodara, Gujarat 390002
+    </div>
+  </div>
+</body>
+</html>
