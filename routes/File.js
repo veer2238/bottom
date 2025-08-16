@@ -173,8 +173,7 @@ app.post('/upload', async (req, res) => {
         from: process.env.EMAIL_USER,
         to: updatedFile.email,
         subject: `Approved – V-Ex Tech Solution`,
-        html: approval.replace(/{{name}}/g, updatedFile.name)
-           .replace(/{{techopted}}/g, updatedFile.techopted)
+        html: `hi`
            
   
       
@@ -473,6 +472,7 @@ page.drawText(closingText, {
 
   
   export default app
+
 
 
 
