@@ -19,6 +19,8 @@ const fileSchema = new mongoose.Schema({
      referedby:String,
      photo:String,
      aadhar:String,
+
+       
      approved: { type: Boolean, default: false },
      createdAt: { type: Date, default: Date.now }
    });
