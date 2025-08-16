@@ -192,10 +192,10 @@ app.post('/upload', async (req, res) => {
       res.json({ success: true, message: "Thanks File approved successfully" });
 
 
-    }catch (err) {
-  console.error("Error approving file:", err.message, err.stack);
-  res.status(500).json({ success: false, message: err.message });
-}
+  } catch (err) {
+      console.error("Error approving file:", err);
+       res.json({ success: false, message: "this is error" });
+    }
 
    
   });
@@ -473,5 +473,6 @@ page.drawText(closingText, {
 
   
   export default app
+
 
 
