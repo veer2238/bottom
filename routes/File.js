@@ -529,6 +529,7 @@ const startyear = StartDate.getFullYear();
     // load and modify completion certificate
 
  const certi_letter_pdf = fs.readFileSync(path.join(__dirname, '..', 'COMLETION_LETTER.pdf'));
+ 
     const certi_pdf = await PDFDocument.load(certi_letter_pdf);
 
     const certi_page = certi_pdf.getPage(0);
@@ -923,7 +924,11 @@ page.drawText(durationText, {
       subject: 'Internship Completion – V-Ex Tech Solution',
       html: emailHtml,
       attachments: [
-    
+        {
+          filename: `Certificate_${fileData.name}.pdf`,
+          content: modifiedPdfBytes,
+          contentType: 'application/pdf',
+        },
          {
           filename: `Completion_Letter_${fileData.name}.pdf`,
           content: completion_letter,
@@ -954,4 +959,3 @@ page.drawText(durationText, {
 
   
   export default app
-
