@@ -19,6 +19,10 @@ const fileSchema = new mongoose.Schema({
      referedby:String,
      photo:String,
      aadhar:String,
+     startdate: Date,
+    enddate: Date,
+    jobtitle: String,
+    
 
        
      approved: { type: Boolean, default: false },
