@@ -923,11 +923,7 @@ page.drawText(durationText, {
       subject: 'Internship Completion – V-Ex Tech Solution',
       html: emailHtml,
       attachments: [
-        {
-          filename: `Certificate_${fileData.name}.pdf`,
-          content: modifiedPdfBytes,
-          contentType: 'application/pdf',
-        },
+    
          {
           filename: `Completion_Letter_${fileData.name}.pdf`,
           content: completion_letter,
@@ -958,3 +954,4 @@ page.drawText(durationText, {
 
   
   export default app
+
