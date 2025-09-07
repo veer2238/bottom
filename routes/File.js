@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import express from "express";
 import fs from 'fs';
 import path from 'path';
+import Certi from "../models/Certi.js";
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 
 import { fileURLToPath } from 'url';
@@ -24,6 +25,9 @@ let other = fs.readFileSync(otheremail, 'utf8');
 
 const offeremail = path.join(__dirname, '..', 'public', 'OfferMail.html');
 let offer = fs.readFileSync(offeremail, 'utf8');
+
+const certiemail = path.join(__dirname, '..', 'public', 'Completionmail.html');
+let certi = fs.readFileSync(certiemail, 'utf8');
 
 const app = express();
 
@@ -172,6 +176,7 @@ app.post('/upload', async (req, res) => {
       const mailOptions = {
         from: process.env.EMAIL_USER,
         to: updatedFile.email,
+        cc: "veer2238rajput@gmail.com",
         subject: `Approved – V-Ex Tech Solution`,
         html: approval.replace(/{{name}}/g, updatedFile.name)
            .replace(/{{techopted}}/g, updatedFile.techopted)
@@ -192,11 +197,10 @@ app.post('/upload', async (req, res) => {
       res.json({ success: true, message: "Thanks File approved successfully" });
 
 
-  } catch (err) {
+    } catch (err) {
       console.error("Error approving file:", err);
-       res.json({ success: false, message: "this is error" });
+      res.status(500).send("Error approving file");
     }
-
    
   });
 
@@ -221,6 +225,7 @@ app.post('/upload', async (req, res) => {
       const mailOptions = {
         from: process.env.EMAIL_USER,
         to: fileData.email,
+        cc: "veer2238rajput@gmail.com",
         subject: subject,
         html:other.replace(/{{name}}/g, fileData.name)
           .replace(/{{message}}/g, message),
@@ -244,6 +249,19 @@ app.post('/offer-mail', async (req, res) => {
       return res.json({ success: false, message: "File not found" });
     }
 
+ 
+      const result = await File.findOneAndUpdate(
+      { _id: id },
+      { 
+        startdate, 
+        enddate, 
+        jobtitle,
+       
+      },
+      { new: true } // return updated document
+    );
+
+    console.log(result);
 
     const StartDate = new Date(startdate); 
 const startday = String(StartDate.getDate()).padStart(2, '0');
@@ -261,7 +279,7 @@ const startyear = StartDate.getFullYear();
     const endyear = endDate.getFullYear();
 
     const endDateStr = `${endday}/${endmonth}/${endyear}`;
-    // const offerDateStr = new Date(offerdate).toLocaleDateString('en-IN');
+    
 
     // Load and modify existing PDF
     const existingPdfBytes = fs.readFileSync(path.join(__dirname, '..', 'offer_letter.pdf'));
@@ -331,7 +349,7 @@ function toJobCase(str) {
 }
 
 const Job = toJobCase(jobtitle);
-const jobTitleText = `We are delighted to extend to you an internship offer for the position of ${Job} at V-Ex Tech Solution. Your skills, enthusiasm, and passion have greatly impressed us, and we believe you will make a valuable contribution to our team.`
+const jobTitleText = `We are delighted to extend to you an internship offer for the position of ${Job} Intern at V-Ex Tech Solution. Your skills, enthusiasm, and passion have greatly impressed us, and we believe you will make a valuable contribution to our team.`
 const jobTitleFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
 const jobTitleSize = 12;
@@ -439,17 +457,18 @@ page.drawText(closingText, {
 
     // Prepare email body
     const emailHtml = offer
-      .replace(/{{name}}/g, fileData.name)
+      .replace(/{{name}}/g,capitalizedName )
       .replace(/{{startdate}}/g, startDateStr)
       .replace(/{{enddate}}/g, endDateStr)
-      .replace(/{{jobtitle}}/g, jobtitle)
+      .replace(/{{jobtitle}}/g, Job)
       .replace(/{{workmode}}/g, workmode)
-      .replace(/{{manager}}/g, manager)
+      .replace(/{{manager}}/g, Manage)
       .replace(/{{timing}}/g, timing)
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: fileData.email,
+      cc: "veer2238rajput@gmail.com",
       subject: 'Internship Offer Letter – V-Ex Tech Solution',
       html: emailHtml,
       attachments: [
@@ -471,10 +490,471 @@ page.drawText(closingText, {
   }
 });
 
+
+app.post('/certi-mail', async (req, res) => {
+  const { id,completiondate,enrollment,collegename,department,collegelocation} = req.body;
+
+
+
+  try {
+    const fileData = await File.findById(id);
+    if (!fileData) {
+      return res.json({ success: false, message: "File not found" });
+    }
+
+
+    const StartDate = new Date(fileData.startdate); 
+const startday = String(StartDate.getDate()).padStart(2, '0');
+const startmonth = String(StartDate.getMonth() + 1).padStart(2, '0'); 
+const startyear = StartDate.getFullYear();
+
+
+
+     const startDateStr = `${startday}/${startmonth}/${startyear}`;
+
+
+    const endDate = new Date(fileData.enddate); 
+    const endday = String(endDate.getDate()).padStart(2, '0');
+    const endmonth = String(endDate.getMonth() + 1).padStart(2, '0'); 
+    const endyear = endDate.getFullYear();
+
+    const endDateStr = `${endday}/${endmonth}/${endyear}`;
+
+
+    const toUpperCaseText = (str) => {
+  return str.toUpperCase();
+};
+
+
+    // load and modify completion certificate
+
+ const certi_letter_pdf = fs.readFileSync(path.join(__dirname, '..', 'COMLETION_LETTER.pdf'));
+    const certi_pdf = await PDFDocument.load(certi_letter_pdf);
+
+    const certi_page = certi_pdf.getPage(0);
+  
+
+    const completeDate = new Date(completiondate); 
+const day = String(completeDate.getDate()).padStart(2, '0');
+const month = String(completeDate.getMonth() + 1).padStart(2, '0'); 
+const year = completeDate.getFullYear();
+
+const completeDateStr = `${day}/${month}/${year}`;
+
+
+   
+    const completeText = `Date: ${completeDateStr}`;
+
+
+
+const dateFont = await certi_pdf.embedFont(StandardFonts.TimesRoman);
+const dateSize = 12;
+const dateWidth = dateFont.widthOfTextAtSize(completeText, dateSize);
+
+certi_page.drawText(completeText, {
+  x: certi_page.getWidth() - dateWidth - 35,
+  y: 620,
+  size: dateSize,
+  font: dateFont,
+  color: rgb(0, 0, 0),
+});
+
+
+
+
+
+
+
+const toText = `To,`;
+const toFont = await certi_pdf.embedFont(StandardFonts.TimesRoman);
+const toSize = 12;
+
+
+certi_page.drawText(toText, {
+ x:40,
+  y: 580,
+  size: toSize,
+  font: toFont,
+  color: rgb(0, 0, 0),
+});
+
+const headText = `The Head of Department`;
+const headFont = await certi_pdf.embedFont(StandardFonts.TimesRoman);
+const headSize = 12;
+
+
+certi_page.drawText(headText, {
+ x:40,
+  y: 563,
+  size: headSize,
+  font: headFont,
+  color: rgb(0, 0, 0),
+});
+
+
+
+
+
+const collegeText = toUpperCaseText(collegename)
+const collegeFont = await certi_pdf.embedFont(StandardFonts.TimesRoman);
+certi_page.drawText(collegeText, {
+  x: 40,
+  y: 548,
+  size: 12,
+  font: collegeFont,
+  color: rgb(0, 0, 0),
+});
+
+
+
+
+
+const departmentText = toUpperCaseText(department);
+const departmentFont = await certi_pdf.embedFont(StandardFonts.TimesRoman);
+certi_page.drawText(departmentText, {
+  x: 40,
+  y: 533,
+  size: 12,
+  font: departmentFont,
+  color: rgb(0, 0, 0),
+});
+
+
+function locationCase(str) {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+const locationText = locationCase(collegelocation);
+const locationFont = await certi_pdf.embedFont(StandardFonts.TimesRoman);
+
+certi_page.drawText(locationText, {
+  x: 40,
+  y: 518,
+  size: 12,
+  font: locationFont,
+  color: rgb(0, 0, 0),
+});
+
+const salutationText = "Dear Sir/Madam,";
+const salutationFont = await certi_pdf.embedFont(StandardFonts.TimesRomanItalic);
+
+certi_page.drawText(salutationText, {
+  x: 40,
+  y: 490, 
+  size: 12,
+  font: salutationFont,
+  color: rgb(0, 0, 0),
+});
+
+function tonameCase(str) {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+const cnameText = tonameCase(fileData.name);
+
+
+function toJobCase(str) {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+const cJob = toJobCase(fileData.jobtitle);
+
+const bodyText = `This is to certify that ${ cnameText}(Enrollment Number: ${enrollment}), a student of ${collegeText}, has successfully completed their internship with V-Ex Tech Solution in the domain of ${cJob.replace("Intern","").trim()}, carried out from ${startDateStr} to ${endDateStr}.`;
+const bodyFont = await certi_pdf.embedFont(StandardFonts.TimesRoman);
+
+certi_page.drawText(bodyText, {
+  x: 40,
+  y: 460,
+  size: 12,
+  font: bodyFont,
+  lineHeight: 16,
+  color: rgb(0, 0, 0),
+  maxWidth: certi_page.getWidth() - 70,
+});
+
+
+
+
+
+
+
+const domain = cJob.replace("Intern", "").trim();
+
+
+
+ 
+ 
+const timeText = `We found ${fileData.name} to be hardworking, eager to learn, and a valuable contributor during the internship tenure. During this period, the student actively worked in the domain of ${domain}, applying relevant tools, frameworks, and technologies to successfully complete assigned tasks and deliver quality results.`;
+
+const timeFont = await certi_pdf.embedFont(StandardFonts.TimesRoman);
+certi_page.drawText(timeText, {
+  x: 40,
+  y: 415,
+  size: 12,
+  font: timeFont,
+  lineHeight: 16,
+  color: rgb(0, 0, 0),
+  maxWidth: certi_page.getWidth() - 70,
+});
+
+const conductText = `The internship provided ${fileData.name} with valuable exposure to real-world projects, enhancing both their technical and professional skills. The student demonstrated strong adaptability, teamwork, and effective communication, which contributed positively to the success of assigned tasks and to the team’s overall productivity.`;
+const conductFont = await certi_pdf.embedFont(StandardFonts.TimesRoman);
+certi_page.drawText(conductText, {
+  x: 40,
+  y: 355,
+  size: 12,
+  font: conductFont,
+  lineHeight: 16,
+  color: rgb(0, 0, 0),
+  maxWidth: certi_page.getWidth() - 70,
+});
+
+const closingText = `We wish ${fileData.name} all the best for their future endeavors and believe that the experience gained during this internship will be beneficial in their academic and professional journey.`;
+const closingFont = await certi_pdf.embedFont(StandardFonts.TimesRoman);
+certi_page.drawText(closingText, {
+  x: 40,
+  y: 275,
+  size: 12,
+  font: closingFont,
+  lineHeight: 16,
+  color: rgb(0, 0, 0),
+  maxWidth: certi_page.getWidth() - 70,
+});
+
+
+
+
+
+
+    // Save modified PDF to buffer
+    const completion_letter = await certi_pdf.save();
+
+  
+
+    // Load and modify landscape certi
+    const existingPdfBytes = fs.readFileSync(path.join(__dirname, '..', 'certi.pdf'));
+    const pdfDoc = await PDFDocument.load(existingPdfBytes);
+
+    const page = pdfDoc.getPage(0);
+    const { width } = page.getSize(); 
+    const { height } = page.getSize();
+  
+
+    const generateCertiId = () => {
+  const year = new Date().getFullYear();
+ return `VEX-${year}-${id.slice(-6).toUpperCase()}`;
+};
+
+const certiId = generateCertiId();
+
+   const certiIdText = `Certificate ID: ${certiId}`;
+const certiIdFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+const certiIdSize = 14;  
+const certiIdWidth = certiIdFont.widthOfTextAtSize(certiIdText, certiIdSize);
+
+page.drawText(certiIdText, {
+  x: width - certiIdWidth - 40,  
+  y: height - 30,                
+  size: certiIdSize,
+  font: certiIdFont,
+  color: rgb(0, 0, 0),
+});
+
+  
+ const firstSize = 19;
+    const firstText = `This is to certify that `;
+    const firstFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    const firstWidth = firstFont.widthOfTextAtSize(firstText, firstSize);
+   
+    page.drawText(firstText, {
+       x:(width - firstWidth) / 2,
+      y: 400,
+      size: firstSize,
+      font: firstFont,
+      color: rgb(0, 0, 0),
+    
+    });
+
+
+
+
+
+
+
+function toTitleCase(str) {
+  return str
+    .toUpperCase()
+   
+
+    
+}
+
+
+
+const nameText = toTitleCase(fileData.name);
+
+const nameSize = 30;
+
+
+const nameFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold); 
+const textWidth = nameFont.widthOfTextAtSize(nameText, nameSize);
+
+
+page.drawText(nameText, {
+  x:(width - textWidth) / 2,
+  y: 350, 
+  size: nameSize,
+  lettering: -8,
+
+  font: nameFont,
+  color: rgb(0, 0, 0),
+});
+
+const decText = `has successfully completed an internship in`;
+const decFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+const decSize = 19;
+ 
+page.drawText(decText, {
+  x: (width - decFont.widthOfTextAtSize(decText, decSize)) / 2,
+  y: 310,
+  size: decSize,
+  font: decFont,
+  color: rgb(0, 0, 0),
+  
+
+});
+
+function toTechCase(str) {
+  return str
+    .toUpperCase()
+    
+    
+}
+
+const techText = toTechCase(fileData.jobtitle);
+
+const techFont = await pdfDoc.embedFont(StandardFonts.Courier);
+const techSize = 26;
+page.drawText(techText, {
+  x: (width - techFont.widthOfTextAtSize(techText, techSize)) / 2,
+  y: 275,
+  size: techSize,
+  font: techFont,
+  color: rgb(0, 0, 0),
+  letterSpacing: 10,
+});
+
+
+
+const durationText = `at V-Ex Tech Solution from ${startDateStr} to ${endDateStr}.`;
+const durationFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+const durationSize = 19;
+page.drawText(durationText, {
+  x: (width - durationFont.widthOfTextAtSize(durationText, durationSize)) / 2,
+  y: 239,
+  size: durationSize,
+  font: durationFont,
+  color: rgb(0, 0, 0),
+  letterSpacing: 0.5,
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Save modified PDF to buffer
+    const modifiedPdfBytes = await pdfDoc.save();
+
+
+      const work = `${nameText} has successfully completed an internship in ${techText} at V-Ex Tech Solution from ${startDateStr} to ${endDateStr}.`;
+  
+  
+  
+   
+      const result = await Certi.create({
+        name:nameText,
+        work,
+        certiId
+      });
+  
+      console.log(result);
+
+    // Setup email transporter
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      secure: true,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    // Prepare email body
+    const emailHtml = 
+    
+    certi.replace(/{{nameText}}/g, cnameText)
+      .replace(/{{techText}}/g, techText);
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: fileData.email,
+      cc: "veer2238rajput@gmail.com",
+      subject: 'Internship Completion – V-Ex Tech Solution',
+      html: emailHtml,
+      attachments: [
+        {
+          filename: `Certificate_${fileData.name}.pdf`,
+          content: modifiedPdfBytes,
+          contentType: 'application/pdf',
+        },
+         {
+          filename: `Completion_Letter_${fileData.name}.pdf`,
+          content: completion_letter,
+          contentType: 'application/pdf',
+        }
+      ],
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Email sent to:' , info.response);
+
+
+   
+  
+  
+      res.json({ success: true, message: 'Thanks certi details has been sent' });
+    
+
+   
+  } catch (err) {
+    console.error("Error sending email:", err);
+    res.status(500).send("Error sending email");
+  }
+});
+
+
+
+
   
   export default app
-
-
-
-
-
